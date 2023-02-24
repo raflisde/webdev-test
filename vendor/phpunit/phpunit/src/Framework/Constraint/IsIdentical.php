@@ -45,8 +45,11 @@ final class IsIdentical extends Constraint
      * @throws \SebastianBergmann\RecursionContext\InvalidArgumentException
      * @throws ExpectationFailedException
      */
-    public function evaluate($other, string $description = '', bool $returnResult = false): ?bool
-    {
+    public function evaluate(
+        $other,
+        string $description = '',
+        bool $returnResult = false
+    ): ?bool {
         $success = $this->value === $other;
 
         if ($returnResult) {
@@ -91,7 +94,8 @@ final class IsIdentical extends Constraint
     {
         if (is_object($this->value)) {
             return 'is identical to an object of class "' .
-                get_class($this->value) . '"';
+                get_class($this->value) .
+                '"';
         }
 
         return 'is identical to ' . $this->exporter()->export($this->value);

@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UsersController;
+use App\Http\Controllers\MoviesController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\CategoryMovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +18,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'index'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name(
+    'auth-login'
+);
+
+Route::middleware('auth')->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/users/destroy/{id}', [UsersController::class, 'destroy']);
+    Route::get('/movies/destroy/{id}', [MoviesController::class, 'destroy']);
+
+    Route::resources([
+        'users' => UsersController::class,
+        'category-movie' => CategoryMovieController::class,
+        'movies' => MoviesController::class,
+    ]);
 });
